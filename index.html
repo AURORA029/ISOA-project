@@ -24,16 +24,18 @@
         body {
             background-color: var(--bg-color);
             background-image: radial-gradient(circle at center, #2a0a10 0%, #0f0505 100%);
-            background-attachment: fixed; /* Le fond ne bouge pas quand on scroll */
+            background-attachment: fixed;
             color: var(--text-color);
             font-family: 'Lato', sans-serif;
-            min-height: 100vh; 
+            min-height: 100vh;
+            /* CORRECTION ICI : On retire justify-content center pour éviter de couper le haut */
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            overflow-y: auto; /* SCROLL ACTIVÉ */
-            padding: 40px 0;
+            align-items: center; 
+            justify-content: flex-start; /* Aligne tout vers le haut pour permettre le scroll */
+            overflow-y: auto; 
+            padding-top: 80px; /* Marge de sécurité pour ne pas être sous l'heure */
+            padding-bottom: 40px;
         }
 
         h1, h2, h3 {
@@ -54,7 +56,7 @@
             max-width: 600px;
             position: relative;
             z-index: 10;
-            margin: auto;
+            margin: 0 auto; /* Centre horizontalement */
         }
 
         .step {
@@ -96,12 +98,12 @@
         button {
             background: linear-gradient(45deg, #b8860b, #d4af37);
             border: none;
-            padding: 12px 30px;
+            padding: 15px 20px; /* Un peu plus grand pour les doigts */
             color: #0f0505;
             font-weight: bold;
             font-family: 'Cinzel', serif;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             cursor: pointer;
             border-radius: 50px;
             transition: transform 0.3s, box-shadow 0.3s;
@@ -110,9 +112,10 @@
             justify-content: center;
             margin: 0 auto;
             width: 100%;
-            max-width: 300px;
-            white-space: normal;
-            line-height: 1.2;
+            max-width: 320px;
+            white-space: normal; /* Permet au texte long (Tacos) de passer à la ligne */
+            line-height: 1.3;
+            font-size: 0.9rem; /* Ajusté pour que le texte O Tacos rentre bien */
         }
 
         button:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--gold); }
@@ -263,14 +266,14 @@
             <h2>Le festin royal</h2>
             <p>Qu'est-ce qui te ferait plaisir ?</p>
             <div class="food-buttons">
-                <button onclick="saveFoodAndNext('Burger')">
-                    <i class="fa-solid fa-burger"></i> Burger Maison
+                <button onclick="saveFoodAndNext('BigMac')">
+                    <i class="fa-solid fa-burger"></i> Big Mac
                 </button>
-                <button onclick="saveFoodAndNext('Tacos')">
-                    <i class="fa-solid fa-pepper-hot"></i> Tacos Spicy
+                <button onclick="saveFoodAndNext('OTacos')">
+                    <i class="fa-solid fa-pepper-hot"></i> O TACOS bien fromageux bien miam
                 </button>
                 <button onclick="saveFoodAndNext('Pizza')">
-                    <i class="fa-solid fa-pizza-slice"></i> Pizza Love
+                    <i class="fa-solid fa-pizza-slice"></i> Pizza Love fromage maison
                 </button>
             </div>
         </div>
@@ -312,7 +315,7 @@
         const TARGET_NAME = "ISOA"; 
         const music = document.getElementById('bgMusic');
         let isPlaying = false;
-        let selectedFood = "Repas";
+        let searchKeyword = "Repas"; // Mot clé pour la recherche Uber
 
         function checkName() {
             const input = document.getElementById('nameInput');
@@ -327,22 +330,30 @@
             }
         }
 
-        function saveFoodAndNext(foodName) {
-            selectedFood = foodName;
-            
-            // Gestion du pluriel propre
-            let displayFood = foodName + "s"; 
-            if(foodName === "Tacos") displayFood = "Tacos"; 
-            if(foodName === "Pizza") displayFood = "Pizzas";
-
+        function saveFoodAndNext(choice) {
             const btnText = document.getElementById('uberBtn');
-            btnText.innerHTML = `<i class="fa-solid fa-motorcycle"></i> Commander des ${displayFood}`;
+            let displayText = "";
+
+            // Logique personnalisée pour chaque choix
+            if (choice === 'BigMac') {
+                displayText = "Commander un Big Mac";
+                searchKeyword = "McDonald's Big Mac";
+            } else if (choice === 'OTacos') {
+                displayText = "Commander un O Tacos";
+                searchKeyword = "O Tacos"; // Recherche simple pour être sûr de trouver
+            } else if (choice === 'Pizza') {
+                displayText = "Commander une Pizza";
+                searchKeyword = "Pizza";
+            }
+
+            // Mise à jour du bouton Uber Eats
+            btnText.innerHTML = `<i class="fa-solid fa-motorcycle"></i> ${displayText}`;
             
             nextStep('choix-bouffe', 'lettre-finale');
         }
 
         function openUber() {
-            const url = `https://www.ubereats.com/search?q=${selectedFood}`;
+            const url = `https://www.ubereats.com/search?q=${searchKeyword}`;
             window.open(url, '_blank');
         }
 
@@ -357,7 +368,7 @@
                 currentDiv.style.display = 'none'; 
                 
                 nextDiv.classList.add('active');
-                // Scroll automatique en haut
+                // Scroll tout en haut pour éviter d'être au milieu de la lettre
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 
                 if (nextId === 'lettre-finale') {
