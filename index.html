@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -119,7 +119,7 @@
             background: rgba(0,0,0,0.4);
             border: 1px solid var(--gold);
             border-radius: 10px;
-            width: 130px; /* Taille fixe */
+            width: 130px;
             padding: 10px;
             cursor: pointer;
             transition: 0.3s;
@@ -133,19 +133,20 @@
             transform: translateY(-5px);
         }
 
-        /* CORRECTION ICI : Taille fixe pour les images */
+        /* Configuration pour tes images locales */
         .card img {
             width: 100%;
-            height: 120px; /* Hauteur forcée pour aligner tout le monde */
-            object-fit: cover; /* L'image remplit le cadre sans être écrasée */
+            height: 120px; /* Hauteur forcée pour un alignement parfait */
+            object-fit: cover;
             border-radius: 5px;
             margin-bottom: 10px;
-            filter: sepia(0.3) brightness(0.9); /* Petit filtre romantique */
+            filter: sepia(0.2) brightness(0.9); /* Léger filtre pour l'ambiance */
         }
 
         .card h3 {
-            font-size: 1rem;
+            font-size: 0.9rem;
             margin-bottom: 0;
+            letter-spacing: 1px;
         }
 
         .food-buttons {
@@ -159,7 +160,17 @@
         .letter-content {
             font-style: italic;
             line-height: 1.6;
-            font-size: 1.1rem;
+            font-size: 1rem;
+            text-align: left;
+        }
+
+        .letter-content p {
+            margin-bottom: 15px;
+        }
+        
+        .signature-block {
+            text-align: center;
+            margin-top: 30px;
         }
 
         .confetti {
@@ -192,16 +203,16 @@
             <h2>Quelle vibe ce soir, Isoa ?</h2>
             <div class="cards-container">
                 <div class="card" onclick="nextStep('choix-perso', 'choix-bouffe')">
-                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&q=80" alt="Chill">
-                    <h3>Chill</h3>
+                    <img src="photo1.webp" alt="Romantique">
+                    <h3>Le Romantique</h3>
                 </div>
                 <div class="card" onclick="nextStep('choix-perso', 'choix-bouffe')">
-                    <img src="https://images.unsplash.com/photo-1514362545857-3bc16549766b?w=400&q=80" alt="Chic">
-                    <h3>Chic</h3>
+                    <img src="photo2.webp" alt="Dévoué">
+                    <h3>Le Dévoué</h3>
                 </div>
                 <div class="card" onclick="nextStep('choix-perso', 'choix-bouffe')">
-                    <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=400&q=80" alt="Aventure">
-                    <h3>Aventure</h3>
+                    <img src="photo3.webp" alt="Possessif">
+                    <h3>Le Possessif</h3>
                 </div>
             </div>
         </div>
@@ -229,14 +240,16 @@
                 <i class="fa-regular fa-heart title-icon"></i>
             </h2>
             <div class="letter-content">
-                <p>Peu importe le choix du style ou du repas, l'important c'est que nous soyons ensemble.</p>
-                <br>
-                <p>Tu es ma personne préférée, aujourd'hui et pour tous les jours à venir.</p>
-                <br>
-                <strong>
-                    Joyeuse Saint-Valentin !
-                    <i class="fa-solid fa-heart signature-heart"></i>
-                </strong>
+                <p>Isoa, je sais que ton esprit s'emballe parfois, que l'anxiété essaie de prendre le dessus. Mais écoute-moi : ce soir, le bruit du monde s'arrête.</p>
+                <p>Dans cette réalité, tu es mon unique focus. Comme Néo dans la Matrice ou le Voyageur dans Genshin, tu es l'Élue. La seule qui compte. Il n'y a personne d'autre. Ne doute jamais de ta place, car elle est ici, protégée, avec moi. Tu es à moi.</p>
+                <p>Maintenant, on oublie tout. Le plan est simple : on commande le truc le plus gras possible, on se met en pyjama, et je te regarde jouer à <strong>Heartopia</strong> toute la soirée. Juste nous deux.</p>
+                
+                <div class="signature-block">
+                    <strong>
+                        Je t'aime.
+                        <i class="fa-solid fa-heart signature-heart"></i>
+                    </strong>
+                </div>
             </div>
         </div>
 
