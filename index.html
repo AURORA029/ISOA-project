@@ -24,14 +24,16 @@
         body {
             background-color: var(--bg-color);
             background-image: radial-gradient(circle at center, #2a0a10 0%, #0f0505 100%);
+            background-attachment: fixed; /* Le fond ne bouge pas quand on scroll */
             color: var(--text-color);
             font-family: 'Lato', sans-serif;
-            height: 100vh;
+            min-height: 100vh; 
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
-            text-align: center;
+            overflow-y: auto; /* SCROLL ACTIVÉ */
+            padding: 40px 0;
         }
 
         h1, h2, h3 {
@@ -52,6 +54,7 @@
             max-width: 600px;
             position: relative;
             z-index: 10;
+            margin: auto;
         }
 
         .step {
@@ -63,6 +66,7 @@
             border-radius: 20px;
             border: var(--border);
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
         }
 
         .step.active {
@@ -105,18 +109,20 @@
             align-items: center;
             justify-content: center;
             margin: 0 auto;
-            width: 100%; /* Boutons pleine largeur pour mobile */
+            width: 100%;
             max-width: 300px;
+            white-space: normal;
+            line-height: 1.2;
         }
 
         button:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--gold); }
 
-        /* Style spécifique pour le bouton Uber Eats */
         .uber-btn {
             background: linear-gradient(45deg, #06C167, #048a4a) !important;
             color: white !important;
             margin-top: 25px !important;
             box-shadow: 0 0 10px rgba(6, 193, 103, 0.4);
+            padding: 15px 20px;
         }
         .uber-btn i { color: white !important; }
 
@@ -155,9 +161,10 @@
         }
 
         .card h3 {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             margin-bottom: 0;
             letter-spacing: 1px;
+            white-space: nowrap;
         }
 
         .food-buttons {
@@ -171,46 +178,50 @@
 
         .letter-content {
             font-style: italic;
-            line-height: 1.6;
-            font-size: 1rem;
+            line-height: 1.8;
+            font-size: 1.05rem;
             text-align: left;
+            padding: 10px;
         }
 
         .letter-content p {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         
         .signature-block {
             text-align: center;
-            margin-top: 30px;
+            margin-top: 40px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
+            padding-bottom: 20px;
         }
 
         .audio-control {
-            margin-top: 10px;
+            margin-top: 15px;
             font-size: 0.8rem;
             color: var(--gold);
             cursor: pointer;
             opacity: 0.7;
             transition: 0.3s;
             border: 1px solid var(--gold);
-            padding: 5px 15px;
+            padding: 8px 20px;
             border-radius: 20px;
             background: rgba(0,0,0,0.3);
+            display: inline-block;
         }
         .audio-control:hover { opacity: 1; background: var(--gold); color: black; }
         .audio-control i { color: inherit; }
 
         .confetti {
-            position: absolute;
+            position: fixed;
             width: 10px;
             height: 10px;
             background-color: var(--gold);
             animation: fall linear forwards;
-            z-index: 5;
+            z-index: 100;
+            pointer-events: none;
         }
 
         @keyframes fall {
@@ -242,8 +253,8 @@
                     <h3>Le Dévoué</h3>
                 </div>
                 <div class="card" onclick="nextStep('choix-perso', 'choix-bouffe')">
-                    <img src="photo3.webp" alt="Possessif">
-                    <h3>Le Possessif</h3>
+                    <img src="photo3.webp" alt="Ta Banane">
+                    <h3>Ta Banane</h3>
                 </div>
             </div>
         </div>
@@ -301,7 +312,7 @@
         const TARGET_NAME = "ISOA"; 
         const music = document.getElementById('bgMusic');
         let isPlaying = false;
-        let selectedFood = "Repas"; // Valeur par défaut
+        let selectedFood = "Repas";
 
         function checkName() {
             const input = document.getElementById('nameInput');
@@ -316,21 +327,21 @@
             }
         }
 
-        // Nouvelle fonction pour sauver le choix de bouffe
         function saveFoodAndNext(foodName) {
             selectedFood = foodName;
             
-            // On met à jour le texte du bouton Uber Eats
+            // Gestion du pluriel propre
+            let displayFood = foodName + "s"; 
+            if(foodName === "Tacos") displayFood = "Tacos"; 
+            if(foodName === "Pizza") displayFood = "Pizzas";
+
             const btnText = document.getElementById('uberBtn');
-            // On change le texte à l'intérieur du bouton
-            btnText.innerHTML = `<i class="fa-solid fa-motorcycle"></i> Commander nos ${foodName}s`;
+            btnText.innerHTML = `<i class="fa-solid fa-motorcycle"></i> Commander des ${displayFood}`;
             
             nextStep('choix-bouffe', 'lettre-finale');
         }
 
         function openUber() {
-            // Ouvre Uber Eats dans un nouvel onglet
-            // On utilise une recherche générique pour tomber sur les bons restos
             const url = `https://www.ubereats.com/search?q=${selectedFood}`;
             window.open(url, '_blank');
         }
@@ -344,7 +355,10 @@
             setTimeout(() => {
                 currentDiv.classList.remove('active');
                 currentDiv.style.display = 'none'; 
+                
                 nextDiv.classList.add('active');
+                // Scroll automatique en haut
+                window.scrollTo({ top: 0, behavior: 'smooth' });
                 
                 if (nextId === 'lettre-finale') {
                     launchConfetti();
@@ -359,7 +373,7 @@
                 isPlaying = true;
                 updateMusicIcon();
             }).catch(error => {
-                console.log("Lecture auto bloquée par le navigateur");
+                console.log("Lecture auto bloquée");
             });
         }
 
