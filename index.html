@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pour Isoa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #0f0505; /* Noir profond teinté de rouge */
+            --text-color: #fce4ec; /* Rose pâle très clair */
+            --gold: #d4af37; /* Or élégant */
+            --gold-hover: #f9d868;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at center, #2a0a10 0%, #0f0505 100%);
+            color: var(--text-color);
+            font-family: 'Lato', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Style spécifique pour les icônes */
+        i {
+            color: var(--gold);
+        }
+        
+        /* Icônes dans les boutons */
+        button i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+        /* Icône coeur signature */
+        .signature-heart {
+            display: block;
+            margin-top: 15px;
+            font-size: 1.5rem;
+        }
+        
+        /* Icônes titre */
+        .title-icon {
+            margin: 0 10px;
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+
+
+        /* Conteneur principal */
+        #app {
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Classes utilitaires pour les transitions */
+        .step {
+            display: none;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            background: var(--glass);
+            padding: 2rem;
+            border-radius: 20px;
+            border: var(--border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .step.active {
+            display: block;
+            animation: fadeIn 1.2s forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Inputs & Boutons */
+        input {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--gold);
+            color: white;
+            font-size: 1.2rem;
+            padding: 10px;
+            text-align: center;
+            outline: none;
+            font-family: 'Cinzel', serif;
+            margin-bottom: 20px;
+            width: 80%;
+        }
+
+        button {
+            background: linear-gradient(45deg, #b8860b, #d4af37);
+            border: none;
+            padding: 12px 30px;
+            color: #0f0505;
+            font-weight: bold;
+            font-family: 'Cinzel', serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--gold);
+        }
+
+        /* Cartes (Choix Perso) */
+        .cards-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--gold);
+            border-radius: 10px;
+            width: 130px;
+            padding: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            background: rgba(212, 175, 55, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .card img {
+            width: 100%;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            filter: sepia(0.5);
+        }
+
+        /* Choix Bouffe */
+        .food-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 80%;
+            margin: 20px auto 0;
+        }
+
+        /* Lettre Finale */
+        .letter-content {
+            font-style: italic;
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+
+        /* Confettis CSS */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: var(--gold);
+            animation: fall linear forwards;
+            z-index: 5;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(100vh) rotate(720deg); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <main id="app">
+        
+        <div id="login" class="step active">
+            <h2>Qui est l'élu(e) de mon cœur ?</h2>
+            <p style="margin-bottom: 20px; opacity: 0.8;">Tape ton prénom pour entrer...</p>
+            <input type="text" id="nameInput" placeholder="Ton prénom..." autocomplete="off">
+            <br>
+            <button onclick="checkName()">Valider</button>
+        </div>
+
+        <div id="choix-perso" class="step">
+            <h2>Quelle vibe ce soir, Isoa ?</h2>
+            <div class="cards-container">
+                <div class="card" onclick="nextStep('choix-perso', 'choix-bouffe')">
+                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&q=80" alt="Chill">
+                    <h3>Chill</h3>
+                </div>
+                <div class="card" onclick="nextStep('choix-perso', 'choix-bouffe')">
+                    <img src="https://images.unsplash.com/photo-1507676184212-d0378b649ea4?w=300&q=80" alt="Chic">
+                    <h3>Chic</h3>
+                </div>
+                <div class="card" onclick="nextStep('choix-perso', 'choix-bouffe')">
+                    <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=300&q=80" alt="Aventure">
+                    <h3>Aventure</h3>
+                </div>
+            </div>
+        </div>
+
+        <div id="choix-bouffe" class="step">
+            <h2>Le festin royal</h2>
+            <p>Qu'est-ce qui te ferait plaisir ?</p>
+            <div class="food-buttons">
+                <button onclick="nextStep('choix-bouffe', 'lettre-finale')">
+                    <i class="fa-solid fa-burger"></i> Burger Maison
+                </button>
+                <button onclick="nextStep('choix-bouffe', 'lettre-finale')">
+                    <i class="fa-solid fa-pepper-hot"></i> Tacos Spicy
+                </button>
+                <button onclick="nextStep('choix-bouffe', 'lettre-finale')">
+                    <i class="fa-solid fa-pizza-slice"></i> Pizza Love
+                </button>
+            </div>
+        </div>
+
+        <div id="lettre-finale" class="step">
+            <h2>
+                <i class="fa-regular fa-heart title-icon"></i> 
+                Pour Isoa 
+                <i class="fa-regular fa-heart title-icon"></i>
+            </h2>
+            <div class="letter-content">
+                <p>Peu importe le choix du style ou du repas, l'important c'est que nous soyons ensemble.</p>
+                <br>
+                <p>Tu es ma personne préférée, aujourd'hui et pour tous les jours à venir.</p>
+                <br>
+                <strong>
+                    Joyeuse Saint-Valentin !
+                    <i class="fa-solid fa-heart signature-heart"></i>
+                </strong>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- CONFIGURATION ---
+        const TARGET_NAME = "ISOA"; 
+
+        // --- FONCTIONS ---
+
+        function checkName() {
+            const input = document.getElementById('nameInput');
+            const val = input.value.trim().toUpperCase();
+            
+            if (val === TARGET_NAME) {
+                nextStep('login', 'choix-perso');
+            } else {
+                // Alerte plus sobre, sans emoji
+                alert("Essaie encore, beauté ! (Indice : c'est ton prénom)");
+                input.value = "";
+                input.focus();
+            }
+        }
+
+        // Gestion de la transition entre les étapes
+        function nextStep(currentId, nextId) {
+            const currentDiv = document.getElementById(currentId);
+            const nextDiv = document.getElementById(nextId);
+
+            // Fade out
+            currentDiv.style.opacity = '0';
+            
+            setTimeout(() => {
+                currentDiv.classList.remove('active');
+                currentDiv.style.display = 'none'; 
+                
+                nextDiv.classList.add('active');
+                
+                if (nextId === 'lettre-finale') {
+                    launchConfetti();
+                }
+            }, 600); 
+        }
+
+        // Fonction Confettis
+        function launchConfetti() {
+            const colors = ['#d4af37', '#fce4ec', '#c62828'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = (Math.random() * 2 + 3) + 's'; 
+                confetti.style.top = -10 + 'px';
+                
+                document.body.appendChild(confetti);
+            }
+        }
+
+        document.getElementById('nameInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                checkName();
+            }
+        });
+
+    </script>
+</body>
+</html>
