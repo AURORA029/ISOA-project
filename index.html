@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -16,6 +16,7 @@
             --gold: #d4af37;
             --glass: rgba(255, 255, 255, 0.05);
             --border: 1px solid rgba(212, 175, 55, 0.3);
+            --uber-green: #06C167;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -104,9 +105,20 @@
             align-items: center;
             justify-content: center;
             margin: 0 auto;
+            width: 100%; /* Boutons pleine largeur pour mobile */
+            max-width: 300px;
         }
 
         button:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--gold); }
+
+        /* Style spécifique pour le bouton Uber Eats */
+        .uber-btn {
+            background: linear-gradient(45deg, #06C167, #048a4a) !important;
+            color: white !important;
+            margin-top: 25px !important;
+            box-shadow: 0 0 10px rgba(6, 193, 103, 0.4);
+        }
+        .uber-btn i { color: white !important; }
 
         .cards-container {
             display: flex;
@@ -133,14 +145,13 @@
             transform: translateY(-5px);
         }
 
-        /* Configuration pour tes images locales */
         .card img {
             width: 100%;
-            height: 120px; /* Hauteur forcée pour un alignement parfait */
+            height: 120px;
             object-fit: cover;
             border-radius: 5px;
             margin-bottom: 10px;
-            filter: sepia(0.2) brightness(0.9); /* Léger filtre pour l'ambiance */
+            filter: sepia(0.2) brightness(0.9);
         }
 
         .card h3 {
@@ -153,7 +164,8 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            width: 80%;
+            align-items: center;
+            width: 100%;
             margin: 20px auto 0;
         }
 
@@ -171,7 +183,26 @@
         .signature-block {
             text-align: center;
             margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
         }
+
+        .audio-control {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: var(--gold);
+            cursor: pointer;
+            opacity: 0.7;
+            transition: 0.3s;
+            border: 1px solid var(--gold);
+            padding: 5px 15px;
+            border-radius: 20px;
+            background: rgba(0,0,0,0.3);
+        }
+        .audio-control:hover { opacity: 1; background: var(--gold); color: black; }
+        .audio-control i { color: inherit; }
 
         .confetti {
             position: absolute;
@@ -212,7 +243,7 @@
                 </div>
                 <div class="card" onclick="nextStep('choix-perso', 'choix-bouffe')">
                     <img src="photo3.webp" alt="Possessif">
-                    <h3>Ta Banane</h3>
+                    <h3>Le Possessif</h3>
                 </div>
             </div>
         </div>
@@ -221,13 +252,13 @@
             <h2>Le festin royal</h2>
             <p>Qu'est-ce qui te ferait plaisir ?</p>
             <div class="food-buttons">
-                <button onclick="nextStep('choix-bouffe', 'lettre-finale')">
+                <button onclick="saveFoodAndNext('Burger')">
                     <i class="fa-solid fa-burger"></i> Burger Maison
                 </button>
-                <button onclick="nextStep('choix-bouffe', 'lettre-finale')">
+                <button onclick="saveFoodAndNext('Tacos')">
                     <i class="fa-solid fa-pepper-hot"></i> Tacos Spicy
                 </button>
-                <button onclick="nextStep('choix-bouffe', 'lettre-finale')">
+                <button onclick="saveFoodAndNext('Pizza')">
                     <i class="fa-solid fa-pizza-slice"></i> Pizza Love
                 </button>
             </div>
@@ -249,14 +280,28 @@
                         Je t'aime.
                         <i class="fa-solid fa-heart signature-heart"></i>
                     </strong>
+                    
+                    <button id="uberBtn" class="uber-btn" onclick="openUber()">
+                        <i class="fa-solid fa-motorcycle"></i> Commander...
+                    </button>
+
+                    <div class="audio-control" onclick="toggleMusic()">
+                        <i id="musicIcon" class="fa-solid fa-music"></i> 
+                        <span id="musicText">Notre chanson</span>
+                    </div>
                 </div>
             </div>
         </div>
 
     </main>
 
+    <audio id="bgMusic" src="Mamiratram4a.m4a" loop></audio>
+
     <script>
         const TARGET_NAME = "ISOA"; 
+        const music = document.getElementById('bgMusic');
+        let isPlaying = false;
+        let selectedFood = "Repas"; // Valeur par défaut
 
         function checkName() {
             const input = document.getElementById('nameInput');
@@ -271,6 +316,25 @@
             }
         }
 
+        // Nouvelle fonction pour sauver le choix de bouffe
+        function saveFoodAndNext(foodName) {
+            selectedFood = foodName;
+            
+            // On met à jour le texte du bouton Uber Eats
+            const btnText = document.getElementById('uberBtn');
+            // On change le texte à l'intérieur du bouton
+            btnText.innerHTML = `<i class="fa-solid fa-motorcycle"></i> Commander nos ${foodName}s`;
+            
+            nextStep('choix-bouffe', 'lettre-finale');
+        }
+
+        function openUber() {
+            // Ouvre Uber Eats dans un nouvel onglet
+            // On utilise une recherche générique pour tomber sur les bons restos
+            const url = `https://www.ubereats.com/search?q=${selectedFood}`;
+            window.open(url, '_blank');
+        }
+
         function nextStep(currentId, nextId) {
             const currentDiv = document.getElementById(currentId);
             const nextDiv = document.getElementById(nextId);
@@ -281,10 +345,47 @@
                 currentDiv.classList.remove('active');
                 currentDiv.style.display = 'none'; 
                 nextDiv.classList.add('active');
+                
                 if (nextId === 'lettre-finale') {
                     launchConfetti();
+                    playMusic();
                 }
             }, 500); 
+        }
+
+        function playMusic() {
+            music.volume = 0.5; 
+            music.play().then(() => {
+                isPlaying = true;
+                updateMusicIcon();
+            }).catch(error => {
+                console.log("Lecture auto bloquée par le navigateur");
+            });
+        }
+
+        function toggleMusic() {
+            if (isPlaying) {
+                music.pause();
+                isPlaying = false;
+            } else {
+                music.play();
+                isPlaying = true;
+            }
+            updateMusicIcon();
+        }
+
+        function updateMusicIcon() {
+            const icon = document.getElementById('musicIcon');
+            const text = document.getElementById('musicText');
+            if (isPlaying) {
+                icon.classList.remove('fa-music');
+                icon.classList.add('fa-pause');
+                text.innerText = "Pause";
+            } else {
+                icon.classList.remove('fa-pause');
+                icon.classList.add('fa-music');
+                text.innerText = "Écouter";
+            }
         }
 
         function launchConfetti() {
