@@ -11,10 +11,9 @@
     
     <style>
         :root {
-            --bg-color: #0f0505; /* Noir profond teinté de rouge */
-            --text-color: #fce4ec; /* Rose pâle très clair */
-            --gold: #d4af37; /* Or élégant */
-            --gold-hover: #f9d868;
+            --bg-color: #0f0505;
+            --text-color: #fce4ec;
+            --gold: #d4af37;
             --glass: rgba(255, 255, 255, 0.05);
             --border: 1px solid rgba(212, 175, 55, 0.3);
         }
@@ -41,33 +40,12 @@
             text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
         }
 
-        /* Style spécifique pour les icônes */
-        i {
-            color: var(--gold);
-        }
+        i { color: var(--gold); }
         
-        /* Icônes dans les boutons */
-        button i {
-            margin-right: 10px;
-            font-size: 1.1rem;
-        }
+        button i { margin-right: 10px; font-size: 1.1rem; }
+        .signature-heart { display: block; margin-top: 15px; font-size: 1.5rem; }
+        .title-icon { margin: 0 10px; opacity: 0.8; font-size: 0.9em; }
 
-        /* Icône coeur signature */
-        .signature-heart {
-            display: block;
-            margin-top: 15px;
-            font-size: 1.5rem;
-        }
-        
-        /* Icônes titre */
-        .title-icon {
-            margin: 0 10px;
-            opacity: 0.8;
-            font-size: 0.9em;
-        }
-
-
-        /* Conteneur principal */
         #app {
             width: 90%;
             max-width: 600px;
@@ -75,11 +53,10 @@
             z-index: 10;
         }
 
-        /* Classes utilitaires pour les transitions */
         .step {
             display: none;
             opacity: 0;
-            transition: opacity 1s ease-in-out;
+            transition: opacity 0.5s ease-in-out;
             background: var(--glass);
             padding: 2rem;
             border-radius: 20px;
@@ -89,7 +66,7 @@
 
         .step.active {
             display: block;
-            animation: fadeIn 1.2s forwards;
+            animation: fadeIn 0.8s forwards;
         }
 
         @keyframes fadeIn {
@@ -97,7 +74,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Inputs & Boutons */
         input {
             background: transparent;
             border: none;
@@ -130,12 +106,8 @@
             margin: 0 auto;
         }
 
-        button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px var(--gold);
-        }
+        button:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--gold); }
 
-        /* Cartes (Choix Perso) */
         .cards-container {
             display: flex;
             gap: 15px;
@@ -147,10 +119,13 @@
             background: rgba(0,0,0,0.4);
             border: 1px solid var(--gold);
             border-radius: 10px;
-            width: 130px;
+            width: 130px; /* Taille fixe */
             padding: 10px;
             cursor: pointer;
             transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .card:hover {
@@ -158,14 +133,21 @@
             transform: translateY(-5px);
         }
 
+        /* CORRECTION ICI : Taille fixe pour les images */
         .card img {
             width: 100%;
+            height: 120px; /* Hauteur forcée pour aligner tout le monde */
+            object-fit: cover; /* L'image remplit le cadre sans être écrasée */
             border-radius: 5px;
             margin-bottom: 10px;
-            filter: sepia(0.5);
+            filter: sepia(0.3) brightness(0.9); /* Petit filtre romantique */
         }
 
-        /* Choix Bouffe */
+        .card h3 {
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+
         .food-buttons {
             display: flex;
             flex-direction: column;
@@ -174,14 +156,12 @@
             margin: 20px auto 0;
         }
 
-        /* Lettre Finale */
         .letter-content {
             font-style: italic;
             line-height: 1.6;
             font-size: 1.1rem;
         }
 
-        /* Confettis CSS */
         .confetti {
             position: absolute;
             width: 10px;
@@ -194,7 +174,6 @@
         @keyframes fall {
             to { transform: translateY(100vh) rotate(720deg); }
         }
-
     </style>
 </head>
 <body>
@@ -213,15 +192,15 @@
             <h2>Quelle vibe ce soir, Isoa ?</h2>
             <div class="cards-container">
                 <div class="card" onclick="nextStep('choix-perso', 'choix-bouffe')">
-                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&q=80" alt="Chill">
+                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&q=80" alt="Chill">
                     <h3>Chill</h3>
                 </div>
                 <div class="card" onclick="nextStep('choix-perso', 'choix-bouffe')">
-                    <img src="https://images.unsplash.com/photo-1507676184212-d0378b649ea4?w=300&q=80" alt="Chic">
+                    <img src="https://images.unsplash.com/photo-1514362545857-3bc16549766b?w=400&q=80" alt="Chic">
                     <h3>Chic</h3>
                 </div>
                 <div class="card" onclick="nextStep('choix-perso', 'choix-bouffe')">
-                    <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=300&q=80" alt="Aventure">
+                    <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=400&q=80" alt="Aventure">
                     <h3>Aventure</h3>
                 </div>
             </div>
@@ -264,10 +243,7 @@
     </main>
 
     <script>
-        // --- CONFIGURATION ---
         const TARGET_NAME = "ISOA"; 
-
-        // --- FONCTIONS ---
 
         function checkName() {
             const input = document.getElementById('nameInput');
@@ -276,56 +252,44 @@
             if (val === TARGET_NAME) {
                 nextStep('login', 'choix-perso');
             } else {
-                // Alerte plus sobre, sans emoji
                 alert("Essaie encore, beauté ! (Indice : c'est ton prénom)");
                 input.value = "";
                 input.focus();
             }
         }
 
-        // Gestion de la transition entre les étapes
         function nextStep(currentId, nextId) {
             const currentDiv = document.getElementById(currentId);
             const nextDiv = document.getElementById(nextId);
 
-            // Fade out
             currentDiv.style.opacity = '0';
             
             setTimeout(() => {
                 currentDiv.classList.remove('active');
                 currentDiv.style.display = 'none'; 
-                
                 nextDiv.classList.add('active');
-                
                 if (nextId === 'lettre-finale') {
                     launchConfetti();
                 }
-            }, 600); 
+            }, 500); 
         }
 
-        // Fonction Confettis
         function launchConfetti() {
             const colors = ['#d4af37', '#fce4ec', '#c62828'];
-            
             for (let i = 0; i < 50; i++) {
                 const confetti = document.createElement('div');
                 confetti.classList.add('confetti');
-                
                 confetti.style.left = Math.random() * 100 + 'vw';
                 confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
                 confetti.style.animationDuration = (Math.random() * 2 + 3) + 's'; 
                 confetti.style.top = -10 + 'px';
-                
                 document.body.appendChild(confetti);
             }
         }
 
         document.getElementById('nameInput').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                checkName();
-            }
+            if (e.key === 'Enter') { checkName(); }
         });
-
     </script>
 </body>
 </html>
