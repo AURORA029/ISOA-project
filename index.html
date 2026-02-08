@@ -28,13 +28,12 @@
             color: var(--text-color);
             font-family: 'Lato', sans-serif;
             min-height: 100vh;
-            /* CORRECTION ICI : On retire justify-content center pour éviter de couper le haut */
             display: flex;
             flex-direction: column;
             align-items: center; 
-            justify-content: flex-start; /* Aligne tout vers le haut pour permettre le scroll */
+            justify-content: flex-start;
             overflow-y: auto; 
-            padding-top: 80px; /* Marge de sécurité pour ne pas être sous l'heure */
+            padding-top: 80px; 
             padding-bottom: 40px;
         }
 
@@ -56,7 +55,7 @@
             max-width: 600px;
             position: relative;
             z-index: 10;
-            margin: 0 auto; /* Centre horizontalement */
+            margin: 0 auto;
         }
 
         .step {
@@ -98,7 +97,7 @@
         button {
             background: linear-gradient(45deg, #b8860b, #d4af37);
             border: none;
-            padding: 15px 20px; /* Un peu plus grand pour les doigts */
+            padding: 15px 20px;
             color: #0f0505;
             font-weight: bold;
             font-family: 'Cinzel', serif;
@@ -113,9 +112,9 @@
             margin: 0 auto;
             width: 100%;
             max-width: 320px;
-            white-space: normal; /* Permet au texte long (Tacos) de passer à la ligne */
+            white-space: normal;
             line-height: 1.3;
-            font-size: 0.9rem; /* Ajusté pour que le texte O Tacos rentre bien */
+            font-size: 0.9rem;
         }
 
         button:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--gold); }
@@ -237,7 +236,7 @@
     <main id="app">
         
         <div id="login" class="step active">
-            <h2>Qui est l'élue de mon cœur ?</h2>
+            <h2>Qui est l'Élue de mon cœur ?</h2>
             <p style="margin-bottom: 20px; opacity: 0.8;">Tape ton prénom pour entrer...</p>
             <input type="text" id="nameInput" placeholder="Ton prénom..." autocomplete="off">
             <br>
@@ -286,7 +285,7 @@
             </h2>
             <div class="letter-content">
                 <p>Isoa, je sais que ton esprit s'emballe parfois, que l'anxiété essaie de prendre le dessus. Mais écoute-moi : ce soir, le bruit du monde s'arrête.</p>
-                <p>Dans cette réalité, tu es mon unique focus. Comme Néo dans la Matrice ou le Voyageur dans Genshin, tu es l'Élue. La seule qui compte. Il n'y a personne d'autre. Ne doute jamais de ta place, car elle est ici, protégée, avec moi. Tu es à moi.</p>
+                <p>Dans cette réalité, tu es mon unique focus. Comme Ulysse qui brave les océans dans <em>Epic</em> pour retrouver Pénélope, <strong>tu es mon Ithaque</strong>. Mon seul refuge. Il n'y a personne d'autre. Ne doute jamais de ta place, car elle est ici, protégée, avec moi.</p>
                 <p>Maintenant, on oublie tout. Le plan est simple : on commande le truc le plus gras possible, on se met en pyjama, et je te regarde jouer à <strong>Heartopia</strong> toute la soirée. Juste nous deux.</p>
                 
                 <div class="signature-block">
@@ -315,7 +314,7 @@
         const TARGET_NAME = "ISOA"; 
         const music = document.getElementById('bgMusic');
         let isPlaying = false;
-        let searchKeyword = "Repas"; // Mot clé pour la recherche Uber
+        let searchKeyword = "Repas"; 
 
         function checkName() {
             const input = document.getElementById('nameInput');
@@ -334,19 +333,18 @@
             const btnText = document.getElementById('uberBtn');
             let displayText = "";
 
-            // Logique personnalisée pour chaque choix
             if (choice === 'BigMac') {
                 displayText = "Commander un Big Mac";
                 searchKeyword = "McDonald's Big Mac";
             } else if (choice === 'OTacos') {
                 displayText = "Commander un O Tacos";
-                searchKeyword = "O Tacos"; // Recherche simple pour être sûr de trouver
+                searchKeyword = "O Tacos"; 
             } else if (choice === 'Pizza') {
                 displayText = "Commander une Pizza";
                 searchKeyword = "Pizza";
             }
 
-            // Mise à jour du bouton Uber Eats
+            // Mise à jour du bouton
             btnText.innerHTML = `<i class="fa-solid fa-motorcycle"></i> ${displayText}`;
             
             nextStep('choix-bouffe', 'lettre-finale');
@@ -368,7 +366,6 @@
                 currentDiv.style.display = 'none'; 
                 
                 nextDiv.classList.add('active');
-                // Scroll tout en haut pour éviter d'être au milieu de la lettre
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 
                 if (nextId === 'lettre-finale') {
